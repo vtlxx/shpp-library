@@ -6,7 +6,7 @@ class Controller
     {
         $book_id = explode('/', $_SERVER['REQUEST_URI'])[2];
         $model = new Model();
-        $contents = $model->get_info_by_id($book_id);
+        $contents = $model->get_info_by_id((int)$book_id);
         $view = new View($contents);
     }
 }
