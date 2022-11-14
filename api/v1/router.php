@@ -14,7 +14,12 @@ add_route('books', function (){
 });
 
 add_route('admin', function (){
-    require 'api/v1/admin.php';
+    require 'controllers/controller-admin.php';
+    require 'models/model-admin.php';
+    require 'views/view-admin.php';
+
+    $controller = new Controller_Admin();
+    $controller->start_controller();
 });
 
 
