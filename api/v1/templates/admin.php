@@ -11,6 +11,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
             crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 </head>
 <body>
 <header>
@@ -24,7 +26,7 @@
         </div>
     </nav>
 </header>
-<div class="container-fluid my-5">
+<div class="container-fluid my-5" id="form">
     <div class="row">
         <div class="col-7">
             <table class="table table-bordered table-striped">
@@ -57,21 +59,51 @@
             <h2 class="fw-bolder text-center">Добавление книги</h2>
             <div class="row">
                 <div class="col-6">
-                    <input class="form-control my-1" type="text" placeholder="Название книги">
-                    <input class="form-control my-2" type="text" placeholder="Год издания">
-                    <input class="form-control my-2" type="file">
-                    <img src="" alt="Тут будет превью изображения :)" onerror="this.onerror=null; this.remove();" class="border border-dark mx-auto d-block" width="180">
+                    <input class="form-control my-1" type="text" id="book-title" placeholder="Название книги">
+                    <input class="form-control my-2" type="text" id="book-year" placeholder="Год издания">
+                    <input class="form-control my-2" type="text" id="book-pages" placeholder="Кол-во страниц">
+                    <input class="form-control my-2" type="file" id="book-img" onchange="displayPreview(event)">
+                    <img src="" id="book-preview" alt="Тут будет превью изображения :)" class="border border-dark mx-auto d-block d-none" width="180">
                 </div>
                 <div class="col-6">
-                    <textarea class="form-control my-1" rows="3" placeholder="Введите автора (если их несколько - через ;)"></textarea>
-                    <textarea class="form-control my-2" rows="12" placeholder="Описание"></textarea>
+                    <textarea class="form-control my-1" rows="3" id="book-authors" placeholder="Введите автора (если их несколько - через ;)"></textarea>
+                    <textarea class="form-control my-2" rows="12" id="book-description" placeholder="Описание"></textarea>
                 </div>
                 <div class="text-center">
-                    <button type="submit" class="btn btn-success fs-4 px-4 my-1">Добавить</button>
+                    <button type="submit" class="btn btn-success fs-4 px-4 my-1" onclick="sendRequest();" id="button-add">Добавить</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    function sendRequest(){
+        //$('body').on('click', '#button-add', function (){
+            let data = {
+                'title': $('#book-title').val(),
+                'year': $('#book-year').val(),
+                'pages': $('#book-pages').val(),
+                'img': $('#book-img').val(),
+                'authors': $('#book-authors').val(),
+                'description': $('#book-description').val()
+            };
+            console.log(data);
+            let response = fetch('http://library.local/admin/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(data)
+            });
+        //});
+    }
+
+    function displayPreview(event){
+        let book_preview = document.getElementById('book-preview');
+
+        book_preview.src=URL.createObjectURL(event.target.files[0]);
+        book_preview.classList.remove('d-none');
+    }
+</script>
 </body>
 </html>
