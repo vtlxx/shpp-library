@@ -19,7 +19,7 @@
             <div id="id" book-id="{book_id}">
                 <div id="bookImg" class="col-xs-12 col-sm-3 col-md-3 item" style="
     margin:;
-"><img src="/static/books-img/<?php echo $contents['id'] ?>.jpg" alt="Responsive image" class="img-responsive">
+"><img src="/static/books-img/<?php echo $contents['img-name'] ?>" alt="Responsive image" class="img-responsive">
 
                     <hr>
                 </div>

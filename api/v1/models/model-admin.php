@@ -2,15 +2,24 @@
 require $_SERVER['DOCUMENT_ROOT'] . '/api/v1/database/connect_db.php';
 
 class Model_Admin{
-    public function get_all_books(): array
+    public function get_books_in_range($page_num, $books_per_page, $total_books, $total_pages): array
     {
         //getting array of all books (all info, without author)
         $mysql = connect_db();
-        $stmt = $mysql->prepare('SELECT * FROM books;');
+        $stmt = $mysql->prepare('SELECT * FROM books LIMIT ?, ?;');
+        // [1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17]
+        // 5 per page   1-st page   [total]-floor([total]/[per_page])*[per_page]
+
+        // 171-170  172-170  173-170  174-170  175-170  176-170  177-170  178-170  179-170  180-170  181-180  182-180
+        //$limit_offset = floor($total_books/$books_per_page)*$books_per_page-($page_num-1)*$books_per_page;
+
+        $limit_offset = ($total_pages-$page_num)*$books_per_page;
+        $limit_offset = max($limit_offset, 0);
+        $stmt->bind_param('ii', $limit_offset, $books_per_page);
         $stmt->execute();
         $contents = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
         //getting authors for every book
-        for ($i=0; $i < sizeof($contents); ++$i) {
+        for ($i=0, $size = count($contents); $i < $size; ++$i) {
             //getting authors names array
             $stmt = $mysql->prepare('SELECT authors.name FROM books_authors 
             INNER JOIN authors ON books_authors.author_id = authors.id
@@ -39,9 +48,8 @@ class Model_Admin{
      * @param $data array info about book [title, year, pages, img, authors, description]
      * @return void
      */
-    public function add_book($data) : void
+    public function add_book($data, $files) : void
     {
-        print_r($data);
         $mysql = connect_db();
 
         //inserting book into books table
@@ -77,6 +85,30 @@ class Model_Admin{
             $stmt->bind_param('ii', $book_id, $author_id);
             $stmt->execute();
         }
+
+        $name = $book_id . '.' . pathinfo($files['bookimage']['name'], PATHINFO_EXTENSION);
+        move_uploaded_file($files['bookimage']['tmp_name'], 'static/books-img/'.$name);
+    }
+
+    public function delete($id) :void {
+        $mysql = connect_db();
+
+        $stmt = $mysql->prepare('DELETE FROM books WHERE id = ?;');
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+
+        $stmt = $mysql->prepare('DELETE FROM books_authors WHERE book_id = ?;');
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+    }
+
+    public function get_total_books(){
+        $mysql = connect_db();
+
+        $stmt = $mysql->prepare('SELECT COUNT(1) FROM books;');
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_row()[0];
     }
 
 }
