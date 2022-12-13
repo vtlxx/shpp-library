@@ -1,7 +1,8 @@
 var pathname = $(location).attr('pathname');
 var bookIdPosition = pathname.lastIndexOf('/') + 1;
 var isBookInUse = false;
-var bookId;
+var bookId = pathname.substr(bookIdPosition);
+//pathname.substr($(location).attr('pathname').lastIndexOf('/') + 1)
 
 /*doAjaxQuery('GET', '/api/v1/books/' + pathname.substr(bookIdPosition), null, function(res) {
     view.fillBookInfo(res.data);
@@ -65,14 +66,6 @@ $('.btnBookID').click(function(event) {
     //         " появится в библиотеке", bookId);
     // } else 
     {
-        alert(
-            "Книга свободна и ты можешь прийти за ней." +
-            " Наш адрес: г. Кропивницкий, переулок Васильевский 10, 5 этаж." +
-            " Лучше предварительно прозвонить и предупредить нас, чтоб " +
-            " не попасть в неловкую ситуацию. Тел. 099 196 24 69"+
-            " \n\n"+
-            "******************\n"+
-            "Кстати, если вы читаете этот текст, то автор сайта еще не отсылает ajax запрос на увеличение количества кликов на кнопку по этой книге"
-        );
+        $.ajax('http://library.local/books/?click=' + bookId);
     }
 });

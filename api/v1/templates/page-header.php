@@ -14,7 +14,7 @@
                                     $("#search").bind("keypress", function (e) {
                                         if (e.keyCode == 13) {
                                             e.preventDefault();
-                                            alert("а вот это придется сделать самому. Ваш @rshmelev");
+                                            window.location.replace("http://library.local/?search="+$(this).val());
                                         }
                                     })
                                 </script>
@@ -31,3 +31,11 @@
         </div>
     </nav>
 </section>
+<script>
+    $(document).ready(function(){
+        let params = new URLSearchParams(window.location.search);
+        if(params.has('search')){
+            $("#search").attr("value", params.get('search'));
+        }
+    });
+</script>

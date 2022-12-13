@@ -48,11 +48,26 @@ class Model {
             $contents['img-name'] = $contents['id'] . '.png';
         }
 
-//        print_r($contents);
-//        echo "<br>".$contents['year'];
+        //incrementing views value
+        $stmt->prepare('UPDATE books SET views=' . $contents['views']+1 . ' WHERE id=?');
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
 
         return $contents;
     }
 
+    public function increment_click($id) : void {
+        $mysql = connect_db();
+        //$stmt = $mysql->prepare('UPDATE books SET clicks=(SELECT clicks FROM (SELECT * FROM books) as allbooks WHERE id=?)+1;');
+        //$stmt->bind_param('i', $id);
+        $stmt = $mysql->prepare('SELECT clicks FROM books WHERE id=?;');
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $num_clicks = $stmt->get_result()->fetch_row()[0];
+
+        $stmt->prepare('UPDATE books SET clicks=' . $num_clicks+1 . ' WHERE id=?;');
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+    }
 }
 

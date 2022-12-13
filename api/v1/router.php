@@ -3,10 +3,12 @@
 $routes = [];
 
 add_route('', function (){
-//    require 'controllers/controller-books-page.php';
-//    require 'models/model-books-page.php';
-//    require 'views/view-books-page.php';
-    require 'templates/page-core.php';
+    require 'controllers/controller-books-page.php';
+    require 'models/model-books-page.php';
+    require 'views/view-books-page.php';
+
+    $controller = new Controller_Books();
+    $controller->start_controller();
 });
 
 add_route('books', function (){
@@ -34,12 +36,14 @@ add_route('admin', function (){
  * @param $path string name of the route
  * @param callable $callback function, that will be called, when somebody goes to this page
  */
-function add_route(string $path, callable $callback){
+function add_route(string $path, callable $callback): void
+{
     global $routes;
     $routes[$path] = $callback;
 }
 
-function route(){
+function route(): void
+{
     global $routes;
     $route_path = '';
     if(str_contains($_SERVER['REQUEST_URI'], '?')) {

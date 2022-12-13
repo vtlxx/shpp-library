@@ -22,7 +22,7 @@ class Controller_Admin
                 //parsing authors string
                 $this->total_books = $model->get_total_books();
                 $contents = $model->get_books_in_range(1, self::BOOKS_PER_PAGE,
-                    $this->total_books, ceil($this->total_books/self::BOOKS_PER_PAGE));
+                    ceil($this->total_books/self::BOOKS_PER_PAGE));
                 $view->set_total_pages(ceil($this->total_books/self::BOOKS_PER_PAGE));
                 $view->refresh_table($contents);
             }
@@ -34,7 +34,7 @@ class Controller_Admin
         else {
             $this->total_books = $model->get_total_books();
             $contents = $model->get_books_in_range($_GET['page'], self::BOOKS_PER_PAGE,
-                $this->total_books, ceil($this->total_books/self::BOOKS_PER_PAGE));
+                ceil($this->total_books/self::BOOKS_PER_PAGE));
             $view->set_total_pages(ceil($this->total_books/self::BOOKS_PER_PAGE));
             $view->display($contents);
         }

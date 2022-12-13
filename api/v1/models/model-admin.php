@@ -2,16 +2,11 @@
 require $_SERVER['DOCUMENT_ROOT'] . '/api/v1/database/connect_db.php';
 
 class Model_Admin{
-    public function get_books_in_range($page_num, $books_per_page, $total_books, $total_pages): array
+    public function get_books_in_range($page_num, $books_per_page, $total_pages): array
     {
         //getting array of all books (all info, without author)
         $mysql = connect_db();
         $stmt = $mysql->prepare('SELECT * FROM books LIMIT ?, ?;');
-        // [1] [2] [3] [4] [5] [6] [7] [8] [9] [10] [11] [12] [13] [14] [15] [16] [17]
-        // 5 per page   1-st page   [total]-floor([total]/[per_page])*[per_page]
-
-        // 171-170  172-170  173-170  174-170  175-170  176-170  177-170  178-170  179-170  180-170  181-180  182-180
-        //$limit_offset = floor($total_books/$books_per_page)*$books_per_page-($page_num-1)*$books_per_page;
 
         $limit_offset = ($total_pages-$page_num)*$books_per_page;
         $limit_offset = max($limit_offset, 0);
@@ -41,6 +36,7 @@ class Model_Admin{
         }
         return $contents;
     }
+
 
     /**
      * This method adds book to database

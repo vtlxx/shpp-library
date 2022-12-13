@@ -109,27 +109,6 @@
         event.preventDefault();
 
         //sending request to add the book
-        /*fetch('http://library.local/admin/add', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: $('#book-form').serialize()
-        }).then((response)=>{
-            if(response.ok){
-                $('#done-modal').modal('show');
-                $('#book-title').val('');
-                $('#book-year').val('');
-                $('#book-pages').val('');
-                $('#book-img').val('');
-                $('#book-authors').val('');
-                $('#book-description').val('');
-                let book_preview = document.getElementById('book-preview')
-                book_preview.classList.add('d-none');
-            } else {
-                $('#fail-modal').modal('show');
-            }
-        });*/
         $.ajax({
             type: 'POST',
             url: 'http://library.local/admin/add',
@@ -164,37 +143,6 @@
         });
     });
     function sendRequest(){
-        // let book_info = {
-        //     'title': $('#book-title').val(),
-        //     'year': $('#book-year').val(),
-        //     'pages': $('#book-pages').val(),
-        //     'img': $('#book-img').val(),
-        //     'authors': $('#book-authors').val(),
-        //     'description': $('#book-description').val()
-        // };
-        // console.log(book_info);
-        // fetch('http://library.local/admin/add', {
-        //     method: 'POST',
-        //     headers: {
-        //         // 'Content-Type': 'multipart/form-data;charset=utf-8'
-        //         'Content-Type': 'undefined'
-        //     },
-        //     body: JSON.stringify(book_info)
-        // }).then((response)=>{
-        //     if(response.ok) {
-        //         $('#done-modal').modal('show');
-        //         $('#book-title').val('');
-        //         $('#book-year').val('');
-        //         $('#book-pages').val('');
-        //         $('#book-img').val('');
-        //         $('#book-authors').val('');
-        //         $('#book-description').val('');
-        //         let book_preview = document.getElementById('book-preview')
-        //         book_preview.classList.add('d-none');
-        //     } else {
-        //         $('#fail-modal').modal('show');
-        //     }
-        // });
         setTimeout(function () {
             $('#done-modal').modal('show');
             $('#book-title').val('');

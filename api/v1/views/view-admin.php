@@ -2,10 +2,12 @@
 
 class View_Admin{
     private int $total_pages;
-    function display($contents){
+    public function display($contents): void
+    {
         require 'api/v1/templates/admin.php';
     }
-    function refresh_table($contents){
+    public function refresh_table($contents): void
+    {
         $result = '<table class="table table-bordered table-striped">
                 <thead>
                 <tr>
@@ -14,6 +16,7 @@ class View_Admin{
                     <th scope="col">Авторы</th>
                     <th scope="col">Год</th>
                     <th scope="col">Действия</th>
+                    <th scope="col">Просмотров</th>
                     <th scope="col">Кликов</th>
                 </tr>
                 </thead>';
@@ -22,7 +25,7 @@ class View_Admin{
             $result .= '<tr><th scope="row">' . $item['id'] . '</th><td>' . $item['title'] . '</td><td>' .
                 $item['author'] . '</td><td>' . $item['year'] . '</td><td>' .
                 '<a href="#" onclick="deleteBook('. $item['id'] .');" class="text-danger">Удалить</a>' . '</td><td>' .
-                'клики' . '</td>';
+                $item['views'] . '</td><td>'. $item['clicks'] .'</td>';
         }
 
         $result .= '</tbody></table><ul class="pagination justify-content-center">';
