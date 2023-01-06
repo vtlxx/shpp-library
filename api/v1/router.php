@@ -21,12 +21,18 @@ add_route('books', function (){
 });
 
 add_route('admin', function (){
-    require 'controllers/controller-admin.php';
-    require 'models/model-admin.php';
-    require 'views/view-admin.php';
+    if(true) {
+//    require 'controllers/controller-admin.php';
+//    require 'models/model-admin.php';
+//    require 'views/view-admin.php';
+//    $controller = new Controller_Admin();
+//    $controller->start_controller();
+    } else {
+        require 'controllers/controller-login.php';
+        require 'models/model-login.php';
+        require 'views/views-login.php';
+    }
 
-    $controller = new Controller_Admin();
-    $controller->start_controller();
 });
 
 

@@ -53,6 +53,13 @@ class Model_Books {
         return $contents;
     }
 
+    public function get_total_books_count() : int{
+        $mysql = connect_db();
+        $stmt = $mysql->prepare('SELECT COUNT(*) FROM books;');
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_all()[0][0];
+    }
 
     public function get_image_by_id($id) : string{
         $img = '';

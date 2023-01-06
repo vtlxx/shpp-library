@@ -53,4 +53,30 @@
             <script src="/static/book-page/js/book.js" defer=""></script>
         </div>
     </div>
+    <div class="modal fade" id="order-book-modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Информация<button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="$('#order-book-modal').modal('hide');">
+                            <span aria-hidden="true">&times;</span>
+                        </button></h4>
+                </div>
+                <div class="modal-body">
+                    Получить книгу можете по адресу: ... <br/>
+                    Контакты: +38XXXXXXXXXX, +38XXXXXXXXXX
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" onclick="$('#order-book-modal').modal('hide');">ОК</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+
+<style>
+    #order-book-modal {
+        opacity: 1;
+        top: 40%;
+        padding-top: 30px;
+    }
+</style>

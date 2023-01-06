@@ -17,6 +17,11 @@ class Controller_Books {
             $search = $_GET['search'];
         }
 
-        $view->display($model->get_books($page, $books_per_page, $search));
+        $contents = $model->get_books($page, $books_per_page, $search);
+        $books_count = $model->get_total_books_count();
+        $max_page = ceil($books_count/(double)$books_per_page);
+        $is_first = $page <= 1;
+        $is_last = $page >= $max_page;
+        $view->display($contents, $is_first, $is_last, $page, $search, $books_per_page);
     }
 }

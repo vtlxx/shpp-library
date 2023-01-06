@@ -50,22 +50,7 @@ var bookId = pathname.substr(bookIdPosition);
 // });
 /*------------------ Sending email by clicking on the button ----------------*/
 $('.btnBookID').click(function(event) {
-    // var email = $('.orderEmail').val();
-    // var isEmail = controller.validateEmail(email);
-    // if (isEmail) {
-    //     view.showSuccessEmail();
-    //     var id = $('#bookID').attr('book-id');
-    //     sendEmailToQueue(id, email);
-    // } else {
-    //     view.showErrEmail();
-    // }
-    // if (isBookInUse) {
-    //     view.showSubscribe(
-    //         "Сейчас эта книга находится на руках, у одного из наших учеников." +
-    //         " Оставь свой email и мы сообщим, как только книга вновь" +
-    //         " появится в библиотеке", bookId);
-    // } else 
-    {
-        $.ajax('http://library.local/books/?click=' + bookId);
-    }
+    console.log('into');
+    $('#order-book-modal').modal('show');
+    $.ajax('http://library.local/books/?click=' + bookId);
 });

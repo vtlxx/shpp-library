@@ -20,9 +20,8 @@
         </div>
         <div class="text-center">
         <ul class="pagination justify-content-center">
-            <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-            <li class="page-item active"><a class="page-link" href="http://library.local?page=1">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+            <li class="page-item <?php if($is_first) echo 'disabled'?>"><a class="page-link" href="<?php echo $link_prev?>">&laquo;</a></li>
+            <li class="page-item <?php if($is_last) echo 'disabled'?>"><a class="page-link" href="<?php echo $link_next?>">&raquo;</a></li>
         </ul>
         </div>
     </div>

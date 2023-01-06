@@ -1,14 +1,3 @@
-<?php
-//function display_table($contents_fun)
-//{
-//    foreach ($contents_fun as $item) {
-//        echo '<tr><th scope="row">' . $item['id'] . '</th><td>' . $item['title'] . '</td><td>' .
-//            $item['author'] . '</td><td>' . $item['year'] . '</td><td>' .
-//            '<a href="#" class="text-danger">Удалить</a>' . '</td><td>' .
-//            'клики' . '</td>';
-//    }
-//}
-?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -86,7 +75,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="fail-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="fail-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
