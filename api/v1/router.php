@@ -1,5 +1,5 @@
 <?php
-
+require 'database/connect_db.php';
 $routes = [];
 
 add_route('', function (){
@@ -23,29 +23,38 @@ add_route('books', function (){
 add_route('admin', function (){
     //checking authorization
     if(isset($_SERVER['PHP_AUTH_USER'])) {
+        if($_SERVER['PHP_AUTH_USER'] === 'logout' && $_SERVER['PHP_AUTH_PW'] === 'logout') {
+            require 'errors/404.html';
+            header('WWW-Authenticate: Basic realm="Войдите в аккаунт!"');
+            header('HTTP/1.0 401 Unauthorized');
+        }
         //checking is password right
-        if($_SERVER['PHP_AUTH_USER'] === 'namee' && $_SERVER['PHP_AUTH_PW'] === 'pass') {
+        if(is_correct_admin($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
             require 'controllers/controller-admin.php';
             require 'models/model-admin.php';
             require 'views/view-admin.php';
             $controller = new Controller_Admin();
             $controller->start_controller();
         } else {
+            require('errors/403.html');
             header('HTTP/1.0 403 Forbidden');
+            header('WWW-Authenticate: Basic realm="Неверный логин/пароль"');
         }
     } else {
         //if user isn't authorized
-        //require 'templates/login-main.php';
-        require 'errors/404.html';
+        require 'errors/401.html';
         header('WWW-Authenticate: Basic realm="Войдите в аккаунт!"');
         header('HTTP/1.0 401 Unauthorized');
     }
 });
 
-add_route('login', function (){
-    require 'templates/login-main.php';
-});
-
+function is_correct_admin($login, $pass) : bool {
+    $mysql = connect_db();
+    $stmt = $mysql->prepare('SELECT COUNT(1) FROM admins WHERE login=? AND password=?;');
+    $stmt->bind_param('ss', $login, $pass);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_all()[0][0] > 0;
+}
 
 /**
  * This method adds new route rule

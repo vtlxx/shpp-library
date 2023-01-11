@@ -1,5 +1,5 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . '/api/v1/database/connect_db.php';
+//require $_SERVER['DOCUMENT_ROOT'] . '/api/v1/database/connect_db.php';
 
 class Model {
 

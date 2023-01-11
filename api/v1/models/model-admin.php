@@ -1,5 +1,5 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . '/api/v1/database/connect_db.php';
+//require $_SERVER['DOCUMENT_ROOT'] . '/api/v1/database/connect_db.php';
 
 class Model_Admin{
     public function get_books_in_range($page_num, $books_per_page, $total_pages): array

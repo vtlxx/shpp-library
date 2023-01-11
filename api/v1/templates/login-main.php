@@ -53,11 +53,6 @@
         font-size: 10pt;
         color: red;
     }
-
-    .isibility-hidden {
-        /*display: none;*/
-        visibility: hidden;
-    }
 </style>
 
 <script>
