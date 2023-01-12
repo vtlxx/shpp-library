@@ -23,13 +23,14 @@ add_route('books', function (){
 add_route('admin', function (){
     //checking authorization
     if(isset($_SERVER['PHP_AUTH_USER'])) {
-        if($_SERVER['PHP_AUTH_USER'] === 'logout' && $_SERVER['PHP_AUTH_PW'] === 'logout') {
-            require 'errors/404.html';
+        //if request for logout
+        if(!empty(file_get_contents('php://input')) &&
+            array_key_exists('logout', json_decode(file_get_contents('php://input'), true))) {
             header('WWW-Authenticate: Basic realm="Войдите в аккаунт!"');
-            header('HTTP/1.0 401 Unauthorized');
+            header('HTTP/1.0 401 Forbidden');
         }
         //checking is password right
-        if(is_correct_admin($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
+        else if(is_correct_admin($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
             require 'controllers/controller-admin.php';
             require 'models/model-admin.php';
             require 'views/view-admin.php';
@@ -42,9 +43,9 @@ add_route('admin', function (){
         }
     } else {
         //if user isn't authorized
-        require 'errors/401.html';
         header('WWW-Authenticate: Basic realm="Войдите в аккаунт!"');
         header('HTTP/1.0 401 Unauthorized');
+        require 'errors/401.html';
     }
 });
 

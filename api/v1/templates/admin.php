@@ -22,7 +22,7 @@
                 <img src="/static/book-page/img/favicon.png" class="img-thumbnail" width="70">
                 <span class="navbar-header fs-3 fw-lighter align-middle">Библиотека</span>
             </a>
-            <a href="#" class="navbar-link text-danger fs-4 fw-bolder" id="button-logout">Выход</a>
+            <a href="" class="navbar-link text-danger fs-4 fw-bolder" id="button-logout">Выход</a>
         </div>
     </nav>
 </header>
@@ -132,14 +132,16 @@
         });
     });
 
-    $('#button-logout').click(function() {
-        location.reload();
+    $('#button-logout').click(function(event) {
+        event.preventDefault();
         fetch('http://library.local/admin', {
             method: 'POST',
-            headers: {
-                'Authorization': 'Basic logout:logout'
-            }
+            body: JSON.stringify({'logout': true})
         });
+
+        setTimeout(function() {
+            location.reload();
+        }, 200);
     });
 
     function sendRequest(){
