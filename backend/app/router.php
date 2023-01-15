@@ -3,18 +3,18 @@ require 'database/connect_db.php';
 $routes = [];
 
 add_route('', function (){
-    require 'controllers/controller-books-page.php';
+    require 'controllers/BooksPage.php';
     require 'models/model-books-page.php';
-    require 'views/view-books-page.php';
+    require 'views/view.php';
 
     $controller = new Controller_Books();
     $controller->start_controller();
 });
 
 add_route('books', function (){
-    require 'controllers/controller-book-page.php';
+    require 'controllers/BookPage.php';
     require 'models/model-book-page.php';
-    require 'views/view-book-page.php';
+    require 'views/view.php';
 
     $controller = new Controller();
     $controller->start_controller();
@@ -24,16 +24,23 @@ add_route('admin', function (){
     //checking authorization
     if(isset($_SERVER['PHP_AUTH_USER'])) {
         //if request for logout
-        if(!empty(file_get_contents('php://input')) &&
-            array_key_exists('logout', json_decode(file_get_contents('php://input'), true))) {
-            header('WWW-Authenticate: Basic realm="Войдите в аккаунт!"');
-            header('HTTP/1.0 401 Forbidden');
+//        if(!empty(file_get_contents('php://input')) &&
+//            array_key_exists('logout', json_decode(file_get_contents('php://input'), true))) {
+//            //print_r($_SESSION);
+//            header( "WWW-Authenticate: Basic realm=\"Test Authentication System\"");
+//            header( "HTTP/1.0 401 Unauthorized");
+//            exit();
+//        }
+        if($_SERVER['PHP_AUTH_USER'] === 'logout' && $_SERVER['PHP_AUTH_PW'] === 'logout') {
+            echo 'trueee';
+            header('HTTP/1.0 401 Unauthorized');
+            header('WWW-Authenticate: Basic realm="Password protected"');
         }
         //checking is password right
         else if(is_correct_admin($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
-            require 'controllers/controller-admin.php';
+            require 'controllers/AdminPage.php';
             require 'models/model-admin.php';
-            require 'views/view-admin.php';
+            require 'views/view.php';
             $controller = new Controller_Admin();
             $controller->start_controller();
         } else {
@@ -47,6 +54,11 @@ add_route('admin', function (){
         header('HTTP/1.0 401 Unauthorized');
         require 'errors/401.html';
     }
+});
+
+add_route('logout', function (){
+    header('HTTP/1.0 401 Unauthorized');
+    //require 'errors/401.html';
 });
 
 function is_correct_admin($login, $pass) : bool {

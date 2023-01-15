@@ -1,12 +1,15 @@
 <?php
-class Controller
+
+namespace app\controllers;
+
+class BookPage extends \vendor\core\Controller
 {
 
     function start_controller(): void
     {
         $model = new Model();
 
-        if(isset($_GET['click'])) {
+        if (isset($_GET['click'])) {
             $model->increment_click($_GET['click']);
         } else {
             $book_id = explode('/', $_SERVER['REQUEST_URI'])[2];
@@ -21,5 +24,15 @@ class Controller
                 $view->error($contents);
             }
         }
+    }
+
+    public function viewAction($id): void
+    {
+        echo "<b>BookPage::viewAction()</b>";
+    }
+
+    public function clickAction($id): void
+    {
+        echo "<b>BookPage::clickAction()</b>";
     }
 }

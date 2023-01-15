@@ -134,14 +134,25 @@
 
     $('#button-logout').click(function(event) {
         event.preventDefault();
-        fetch('http://library.local/admin', {
-            method: 'POST',
-            body: JSON.stringify({'logout': true})
+        // fetch('http://library.local/admin', {
+        //     method: 'POST',
+        //     //headers: {'Authorization': 'Basic ' + btoa('logout:logout')},
+        //     body: JSON.stringify({'logout': true})
+        // });
+        //
+        // setTimeout(function() {
+        //     //location.reload();
+        //     location.href = 'http://library.local/401'
+        // }, 200);
+        fetch('http://library.local/logout', {
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Basic ' + btoa('none:none'),
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(() => {
+            window.location.assign('http://library.local');
         });
-
-        setTimeout(function() {
-            location.reload();
-        }, 200);
     });
 
     function sendRequest(){
