@@ -1,12 +1,7 @@
 <?php
 
-class View{
-    function display($contents) {
-        $template = 'book-page';
-        include 'api/v1/templates/page-core.php';
-    }
+namespace app\views\BookPage;
 
-    function error($error) {
-        include 'api/v1/errors/' . $error . '.html';
-    }
+class View extends \app\views\View {
+
 }

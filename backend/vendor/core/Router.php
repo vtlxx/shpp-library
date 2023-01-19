@@ -13,12 +13,12 @@ class Router
         self::$routes[$url] = $route;
     }
 
-    public static function get_routes(): array
+    public static function getRoutes(): array
     {
         return self::$routes;
     }
 
-    public static function get_route(): array
+    public static function getRoute(): array
     {
         return self::$current;
     }
@@ -29,7 +29,7 @@ class Router
      * @param $url string page path (url)
      * @return bool whether the route was found
      */
-    public static function set_route(string $url): bool
+    public static function setRoute(string $url): bool
     {
         foreach (self::$routes as $route_pattern => $route_value) {
             //if route is found - return true
@@ -50,17 +50,14 @@ class Router
 
     public static function route($query): void
     {
+        $query = self::clearGetParams($query);
         //checking whether there is a route for this request
-        if (self::set_route($query)) {
-            $route = self::get_route();
+        if (self::setRoute($query)) {
+            $route = self::getRoute();
             //checking whether controller class for this route
             if (class_exists(self::$controllersNamespace . $route['controller'])) {
                 $controller = new (self::$controllersNamespace . $route['controller']);
-                if (array_key_exists('id', $route)) {
-                    $controller->run($route['action'], $route['id']);
-                } else {
-                    $controller->run($route['action']);
-                }
+                $controller->run($route);
             } else {
                 echo 'Controller ' . $route['controller'] . ' not found!';
             }
@@ -75,4 +72,11 @@ class Router
         self::$controllersNamespace = $namespace;
     }
 
+    protected static function clearGetParams($query) : string{
+        if($query && strpos($query, '?')) {
+            return trim(substr($query, 0, strpos($query, '?')), '/');
+        }
+
+        return $query;
+    }
 }

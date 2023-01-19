@@ -1,7 +1,7 @@
 <?php
-//require $_SERVER['DOCUMENT_ROOT'] . '/api/v1/database/connect_db.php';
+namespace app\models;
 
-class Model_Admin{
+class AdminPage extends Model{
     public function get_books_in_range($page_num, $books_per_page, $total_pages): array
     {
         //getting array of all books (all info, without author)

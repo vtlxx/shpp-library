@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-class AdminPage extends \vendor\core\Controller
+class AdminPage extends Controller
 {
     private int $total_books;
     private const BOOKS_PER_PAGE = 10;
@@ -44,11 +44,15 @@ class AdminPage extends \vendor\core\Controller
 
     public function viewAction(): void
     {
-        echo '<b>AdminPage::viewAction()</b>';
+        echo "<b>AdminPage::viewAction()</b>";
+        $view = $this->initView();
+        //TODO: getting content from model
+        $content = ['funcName' => 'viewAction in AdminPage done!'];
+        $view->display($content);
     }
 
-    public function deleteAction($id): void
+    public function deleteAction($route): void
     {
-        echo "<b>BookPage::deleteAction($id)</b>";
+        echo "<b>AdminPage::deleteAction({$route['id']})</b>";
     }
 }

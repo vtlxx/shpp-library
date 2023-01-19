@@ -2,37 +2,29 @@
 
 namespace app\controllers;
 
-class BookPage extends \vendor\core\Controller
+class BookPage extends Controller
 {
 
-    function start_controller(): void
+    public function viewAction(): void
     {
-        $model = new Model();
+        //GETTING CONTENT FROM MODEL
+        $model = new \app\models\BookPage();
+        $content = $model->getBookInfo($this->route['id'], ['id', 'title', 'description', 'pages', 'year']);
+        //setting authors string (by converting an array to string)
+        $content['author'] = implode(', ', array_column($model->getBookAuthors($this->route['id']), 'name'));
+        //setting image name by book id (trying different extensions)
+        $content['imgName'] = $this->getImgName($this->route['id']);
+        //incrementing view count
+        $model->incrementViews($this->route['id']);
 
-        if (isset($_GET['click'])) {
-            $model->increment_click($_GET['click']);
-        } else {
-            $book_id = explode('/', $_SERVER['REQUEST_URI'])[2];
-            $contents = $model->get_info_by_id((int)$book_id);
-
-            $view = new View();
-            //if book does not exist
-            if (is_array($contents)) {
-                $view->display($contents);
-            } else {
-                //displaying error page
-                $view->error($contents);
-            }
-        }
+        //DISPLAYING CONTENT
+        $view = $this->initView();
+        $view->display($content);
     }
 
-    public function viewAction($id): void
+    public function clickAction(): void
     {
-        echo "<b>BookPage::viewAction()</b>";
-    }
-
-    public function clickAction($id): void
-    {
-        echo "<b>BookPage::clickAction()</b>";
+        $model = new \app\models\BookPage();
+        $model->incrementClicks($this->route['id']);
     }
 }

@@ -4,23 +4,20 @@ namespace vendor\core;
 
 abstract class Controller
 {
-    private string $action;
-    private ?int $id;
+    protected array $route;
 
-    public function run($action = 'view', $id = null): void
+    public function run($route) : void
     {
-        $this->action = $action;
-        $this->id = $id;
-        echo get_class($this) . "::run($this->action, $this->id)<br/>";
-        $action .= 'Action';
-        if (method_exists($this, $action)) {
-            if (isset($id)) {
-                $this->$action($id);
-            } else {
-                $this->$action();
-            }
+        $this->route = $route;
+        $actionFunction = $route['action'] . 'Action';
+        if (method_exists($this, $actionFunction)) {
+            $this->$actionFunction();
         } else {
-            echo "Функция <b>$action</b> не найдена!";
+            echo "Функция <b>$actionFunction</b> не найдена!";
         }
+    }
+
+    public function initView() {
+        return new (VIEWS_NAMESPACE . '\\' . $this->route['controller'] . '\\View')($this->route['controller'], $this->route['action']);
     }
 }

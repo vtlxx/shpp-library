@@ -1,11 +1,10 @@
 <?php
 
-class View_Admin{
+namespace app\views\AdminPage;
+
+class View extends \app\views\View {
     private int $total_pages;
-    public function display($contents): void
-    {
-        require 'api/v1/templates/admin.php';
-    }
+
     public function refresh_table($contents): void
     {
         $result = '<table class="table table-bordered table-striped">
