@@ -4,25 +4,20 @@ namespace app\models;
 class BooksPage extends Model{
     public int $totalBooks;
 
-    public function getBooks($pageNum, $booksPerPage, $orderBy) : array {
-        $books = $this->executeDB("SELECT id, title, year FROM books ORDER BY $orderBy DESC LIMIT ?, ?",
-            'ii', [($pageNum-1)*$booksPerPage, $booksPerPage]);
-        $this->totalBooks = (int)$this->executeDB('SELECT COUNT(*) as num FROM books;')[0]['num'];
-        return $books;
-    }
+//    public function getBooks($pageNum, $booksPerPage, $orderBy) : array {
+//        $books = $this->executeDB("SELECT id, title, year FROM books ORDER BY $orderBy DESC LIMIT ?, ?",
+//            'ii', [($pageNum-1)*$booksPerPage, $booksPerPage]);
+//        $this->totalBooks = (int)$this->executeDB('SELECT COUNT(*) as num FROM books;')[0]['num'];
+//        return $books;
+//    }
 
     public function getBooksByTitle($pageNum, $booksPerPage, $orderBy, $title) : array {
         $books = $this->executeDB("SELECT id, title, year FROM books WHERE title LIKE ? ORDER BY $orderBy DESC LIMIT ?, ?",
             'sii', ['%' . $title . '%', ($pageNum-1)*$booksPerPage, $booksPerPage]);
-        $this->totalBooks = (int)$this->executeDB('SELECT COUNT(*) as num FROM books WHERE title LIKE ?;',
-            's', ['%' . $title . '%'])[0]['num'];
+        $this->totalBooks = $this->getTotalBooks($title);
         return $books;
     }
 
-    public function getTotalBooks() : int{
-        $result = $this->executeDB('SELECT COUNT(*) as num FROM books;');
-        return $result[0]['num'];
-    }
 //    public function get_books($page_num, $books_per_page, $search): array
 //    {
 //        //getting array of all books (all info, without author)

@@ -46,7 +46,7 @@ class BooksPage extends Controller
             $content = $model->getBooksByTitle($pageNum, BOOKS_PER_PAGE, 'views', $_GET['search']);
         }
         else {
-            $content = $model->getBooks($pageNum, BOOKS_PER_PAGE, 'views');
+            $content = $model->getBooks(['id', 'title', 'year'], $pageNum, BOOKS_PER_PAGE, 'views', 'DESC');
         }
         //adding author field
         foreach ($content as &$book) {
@@ -57,7 +57,7 @@ class BooksPage extends Controller
         $view = $this->initView();
         //getting info for pagination
         $isFirst = $pageNum === 1;
-        $isLast = $pageNum*BOOKS_PER_PAGE >= $model->totalBooks;
+        $isLast = $pageNum*BOOKS_PER_PAGE >= $model->getTotalBooks();
 
         $view->setPagination($pageNum, $isFirst, $isLast);
         //displaying content
