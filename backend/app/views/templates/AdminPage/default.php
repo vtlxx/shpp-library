@@ -19,7 +19,7 @@
     <nav class="navbar bg-light">
         <div class="container-fluid">
             <a href="#" class="navbar-brand">
-                <img src="/static/book-page/img/favicon.png" class="img-thumbnail" width="70">
+                <img src="/static/favicon.ico" class="img-thumbnail" width="70">
                 <span class="navbar-header fs-3 fw-lighter align-middle">Библиотека</span>
             </a>
             <a href="" class="navbar-link text-danger fs-4 fw-bolder" id="button-logout">Выход</a>
@@ -29,10 +29,8 @@
 <div class="container-fluid my-5" id="form">
     <div class="row">
         <div class="col-7" id="table-pagination">
-
-                <?php
-                    $this->refresh_table($contents);
-                ?>
+                <?=$content?>
+                <?=$pagination?>
         </div>
         <form class="needs-validation col-5" id="book-form" method="post" enctype="multipart/form-data">
             <!--action="http://library.local/admin/add" onsubmit="sendRequest()" ||  action="http://library.local/admin/add" method="post"-->
@@ -40,9 +38,9 @@
                 <div class="row">
                     <div class="col-6">
                         <input class="form-control my-1" name="title" autocomplete="off" type="text" id="book-title" placeholder="Название книги" required>
-                        <input class="form-control my-2" name="year" autocomplete="off" type="text" id="book-year" placeholder="Год издания" required>
-                        <input class="form-control my-2" name="pages" autocomplete="off" type="text" id="book-pages" placeholder="Кол-во страниц" required>
-                        <input class="form-control my-2" name="bookimage" type="file" id="book-img" onchange="displayPreview(event)" required>
+                        <input class="form-control my-2" name="year" autocomplete="off" type="number" id="book-year" placeholder="Год издания" required>
+                        <input class="form-control my-2" name="pages" autocomplete="off" type="number" id="book-pages" placeholder="Кол-во страниц" required>
+                        <input class="form-control my-2" name="bookimage" type="file" id="book-img" onchange="displayPreview(event)" accept=".jpg, .jpeg, .png" required>
                         <img src="" id="book-preview" alt="Тут будет превью изображения :)" class="border border-dark mx-auto d-block d-none" width="180">
                     </div>
                     <div class="col-6">
@@ -100,7 +98,7 @@
         //sending request to add the book
         $.ajax({
             type: 'POST',
-            url: 'http://library.local/admin/add',
+            url: 'http://library.local/admin/api/v2/add',
             data: new FormData($(this)[0]),
             //data: $(this).serialize(),
             contentType: false,
@@ -119,7 +117,7 @@
                 setTimeout(function () {
                     $.ajax({
                         type: 'POST',
-                        url: 'http://library.local/admin/refresh',
+                        url: 'http://library.local/admin/api/v2/refresh',
                         data: "",
                         cache: false,
                         success: function (data) {
@@ -134,16 +132,6 @@
 
     $('#button-logout').click(function(event) {
         event.preventDefault();
-        // fetch('http://library.local/admin', {
-        //     method: 'POST',
-        //     //headers: {'Authorization': 'Basic ' + btoa('logout:logout')},
-        //     body: JSON.stringify({'logout': true})
-        // });
-        //
-        // setTimeout(function() {
-        //     //location.reload();
-        //     location.href = 'http://library.local/401'
-        // }, 200);
         fetch('http://library.local/logout', {
             credentials: 'include',
             headers: {
@@ -182,14 +170,14 @@
     }
 
     function deleteBook(id) {
-        fetch('http://library.local/admin/delete?id='+id, {
+        fetch('http://library.local/admin/api/v2/delete/'+id, {
             method: 'GET'
         }).then((response)=>{
             if(response.ok) {
                 setTimeout(function (){
                     $.ajax({
                         type: 'POST',
-                        url: 'http://library.local/admin/refresh',
+                        url: 'http://library.local/admin/api/v2/refresh',
                         data: "",
                         cache: false,
                         success: function (data){
@@ -208,5 +196,17 @@
         book_preview.classList.remove('d-none');
     }
 </script>
+<style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        /* display: none; <- Crashes Chrome on hover */
+        -webkit-appearance: none;
+        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+    }
+
+    input[type=number] {
+        -moz-appearance:textfield; /* Firefox */
+    }
+</style>
 </body>
 </html>
