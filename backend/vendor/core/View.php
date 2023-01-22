@@ -7,7 +7,7 @@ abstract class View
     protected string $template;
     protected string $layout;
     //matching action to layout
-    protected array $templates = ['view' => 'default'];
+    protected array $templates = ['view' => 'default', 'refresh' => 'none'];
 
     public function __construct($template, $action)
     {

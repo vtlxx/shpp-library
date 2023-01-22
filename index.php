@@ -13,9 +13,18 @@ spl_autoload_register(function ($class) {
 
 define('VIEWS_NAMESPACE', 'app\views');
 define('APP_PATH', 'backend/app');
-define('IMG_PATH', 'static/books-img');
-define('BOOKS_PER_PAGE', array_key_exists('offset', $_GET) && isset($_GET['offset']) ? $_GET['offset'] : 3);
+define('IMG_PATH', 'static/books-img/');
+define('BOOKS_PER_PAGE', array_key_exists('offset', $_GET) && isset($_GET['offset']) ? $_GET['offset'] : 4);
+define('BOOKS_PER_PAGE_ADMIN', 4);
+define('ADMIN_PAGINATION_RANGE', 3);
+define('DEFAULT_IMG', 'default.jpg');
 
+
+/**
+ * API DESCRIPTION:
+ * /api/v2/books/   for non admin operations (increment clicks)
+ * /admin/api/v2/   for admin operations (require Authorization header (basic auth))
+ */
 //setting controllers namespace for routes
 Router::setControllersNamespace('app\\controllers\\');
 //setting routes

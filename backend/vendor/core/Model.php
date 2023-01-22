@@ -54,4 +54,9 @@ abstract class Model
         }
         return false;
     }
+
+    protected function getMysqli() : mysqli {
+        return new mysqli($this->databaseData['host'], $this->databaseData['user'],
+            $this->databaseData['password'], $this->databaseData['name']);
+    }
 }

@@ -24,4 +24,20 @@ abstract class Model extends \vendor\core\Model
     public function getBookInfo(int $id, array $columns) : array|bool {
         return $this->executeDB('SELECT ' . implode(',', $columns) . ' FROM books WHERE id=?;', 'i', [$id])[0];
     }
+
+    public function getBooks($fields, $pageNum, $booksPerPage, $orderBy, $order) : array {
+        $fields = implode(', ', $fields);
+        $books = $this->executeDB("SELECT $fields FROM books ORDER BY $orderBy $order LIMIT ?, ?",
+            'ii', [($pageNum-1)*$booksPerPage, $booksPerPage]);
+        $this->totalBooks = $this->getTotalBooks();
+        return $books;
+    }
+
+    public function getTotalBooks($title = null) : int{
+        if(isset($title)) {
+            return (int)$this->executeDB('SELECT COUNT(*) as num FROM books WHERE title LIKE ?;',
+                's', ['%' . $title . '%'])[0]['num'];
+        }
+        return (int)$this->executeDB('SELECT COUNT(*) as num FROM books;')[0]['num'];
+    }
 }
