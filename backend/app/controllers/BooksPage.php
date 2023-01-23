@@ -33,31 +33,28 @@ class BooksPage extends Controller
 
     public function viewAction(): void
     {
-        /*  TODO: getting content from model
-         *  getting only books, that need to be displayed
-         *  so, first, need to count they by pagination
-         */
-
         $model = new \app\models\BooksPage;
         //setting current page num
         $pageNum = (int)(array_key_exists('page', $_GET) && isset($_GET['page']) ? $_GET['page'] : 1);
         //getting info about books for current page
         if(array_key_exists('search', $_GET) && isset($_GET['search'])) {
             $content = $model->getBooksByTitle($pageNum, BOOKS_PER_PAGE, 'views', $_GET['search']);
+            $totalBooks = $model->getTotalBooks($_GET['search']);
         }
         else {
             $content = $model->getBooks(['id', 'title', 'year'], $pageNum, BOOKS_PER_PAGE, 'views', 'DESC');
+            $totalBooks = $model->getTotalBooks();
         }
         //adding author field
         foreach ($content as &$book) {
-            $book['imgName'] = $this->getImgName($book['id']);
+            $book['imgName'] = self::getImgName($book['id']);
             $book['author'] = implode(', ', array_column($model->getBookAuthors($book['id']), 'name'));
         }
 
         $view = $this->initView();
         //getting info for pagination
         $isFirst = $pageNum === 1;
-        $isLast = $pageNum*BOOKS_PER_PAGE >= $model->getTotalBooks();
+        $isLast = $pageNum*BOOKS_PER_PAGE >= $totalBooks;
 
         $view->setPagination($pageNum, $isFirst, $isLast);
         //displaying content

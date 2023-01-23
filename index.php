@@ -12,6 +12,7 @@ spl_autoload_register(function ($class) {
 });
 
 define('VIEWS_NAMESPACE', 'app\views');
+define('VIEWS_PATH', 'backend/app/views');
 define('APP_PATH', 'backend/app');
 define('IMG_PATH', 'static/books-img/');
 define('BOOKS_PER_PAGE', array_key_exists('offset', $_GET) && isset($_GET['offset']) ? $_GET['offset'] : 4);

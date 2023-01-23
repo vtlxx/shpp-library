@@ -132,7 +132,7 @@
 
     $('#button-logout').click(function(event) {
         event.preventDefault();
-        fetch('http://library.local/logout', {
+        fetch('http://library.local/admin/api/v2/logout', {
             credentials: 'include',
             headers: {
                 'Authorization': 'Basic ' + btoa('none:none'),
