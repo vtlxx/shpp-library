@@ -13,7 +13,7 @@ class BookPage extends Controller
         //setting authors string (by converting an array to string)
         $content['author'] = implode(', ', array_column($model->getBookAuthors($this->route['id']), 'name'));
         //setting image name by book id (trying different extensions)
-        $content['imgName'] = $this->getImgName($this->route['id']);
+        $content['imgName'] = self::getImgName($this->route['id']);
         //incrementing view count
         $model->incrementViews($this->route['id']);
 

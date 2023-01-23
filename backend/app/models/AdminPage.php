@@ -52,13 +52,20 @@ class AdminPage extends Model{
     public function deleteBook(int $id) : bool
     {
         //finding authors, that linked with this book
+        $this->executeDB('UPDATE books SET delete_date=DATE_ADD(now(), INTERVAL 1 MINUTE) WHERE id=?;',
+            'i', [$id]);
+    }
+
+    public function finalDeleteBook($id) : bool
+    {
+        //finding authors, that linked with this book
         $authors = $this->executeDB('SELECT author_id as id FROM books_authors WHERE book_id=?;', 'i', [$id]);
         //getting only those authors, who linked only to this book
         foreach ($authors as $author)
         {
             //checking other connections for this author
             $otherBooks = $this->executeDB('SELECT COUNT(1) as count FROM books_authors WHERE author_id=? AND book_id!=?;',
-            'ii', [$author['id'], $id]);
+                'ii', [$author['id'], $id]);
             //if this book is only link for the author - delete him
             if($otherBooks[0]['count'] === 0) {
                 $this->executeDB('DELETE FROM authors WHERE id=?;', 'i', [$author['id']]);

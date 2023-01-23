@@ -4,40 +4,32 @@ namespace app\controllers;
 
 class AdminPage extends Controller
 {
-//    public function start_controller(): void
-//    {
-//        $action = explode('/', $_SERVER['REQUEST_URI']);
-//        $model = new Model_Admin();
-//        $view = new View_Admin();
-//
-//        //if it's request to add a book
-//        if (array_key_exists(2, $action)) {
-//            if ($action[2] === 'add') {
-//                $data = $_POST;
-//                //parsing authors string
-//                $data['authors'] = explode(';', $data['authors']);
-//
-//                $model->add_book($data, $_FILES);
-//            } elseif ($action[2] === 'refresh') {
-//                //parsing authors string
-//                $this->total_books = $model->get_total_books();
-//                $contents = $model->get_books_in_range(1, self::BOOKS_PER_PAGE,
-//                    ceil($this->total_books / self::BOOKS_PER_PAGE));
-//                $view->set_total_pages(ceil($this->total_books / self::BOOKS_PER_PAGE));
-//                $view->refresh_table($contents);
-//            } elseif (substr($action[2], 0, strpos($action[2], '?')) === 'delete') {
-//                $model->delete($_GET['id']);
-//            }
-//        } //if it's request to show admin page
-//        else {
-//            $this->total_books = $model->get_total_books();
-//            $page = array_key_exists('page', $_GET) ? $_GET['page'] : 1;
-//            $contents = $model->get_books_in_range($page, self::BOOKS_PER_PAGE,
-//                ceil($this->total_books / self::BOOKS_PER_PAGE));
-//            $view->set_total_pages(ceil($this->total_books / self::BOOKS_PER_PAGE));
-//            $view->display($contents);
-//        }
-//    }
+
+    public function __construct()
+    {
+        //checking is correct admin user
+        if(!isset($_SERVER['PHP_AUTH_USER'])) {
+            //if user isn't authorized
+            header('WWW-Authenticate: Basic realm="Войдите в аккаунт!"');
+            header('HTTP/1.0 401 Unauthorized');
+            $view = new \app\views\ErrorPage\View;
+            $view->display('401');
+            exit();
+        }
+        if($_SERVER['PHP_AUTH_USER'] === 'logout' && $_SERVER['PHP_AUTH_PW'] === 'logout') {
+            header('HTTP/1.0 401 Unauthorized');
+            exit();
+        }
+        $isAdmin = $this->isCorrectAdmin($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
+        if(!$isAdmin) {
+            //if user incorrect admin
+            header('HTTP/1.0 403 Forbidden');
+            header('WWW-Authenticate: Basic realm="Неверный логин/пароль"');
+            $view = new \app\views\ErrorPage\View;
+            $view->display('403');
+            exit();
+        }
+    }
 
     public function viewAction(): void
     {
@@ -94,9 +86,9 @@ class AdminPage extends Controller
         $model = new \app\models\AdminPage();
         if($model->deleteBook((int)$this->route['id']) !== false) {
             //deleting image of the book
-            $imgName = $this->getImgName($this->route['id']);
+            $imgName = self::getImgName($this->route['id']);
             if($imgName !== DEFAULT_IMG) {
-                unlink(IMG_PATH . $imgName);
+                //unlink(IMG_PATH . $imgName);
             }
             echo json_encode(['ok' => true]);
         }
@@ -105,5 +97,13 @@ class AdminPage extends Controller
             echo json_encode(['error' => 'delete went wrong!']);
         }
 
+    }
+
+    private function isCorrectAdmin(string $login, string $pass) : bool
+    {
+        $model = new \app\models\AdminPage();
+        $result = $model->executeDB('SELECT COUNT(1) as count FROM admins WHERE login=? AND password=?;',
+            'ss', [$login, $pass]);
+        return $result[0]['count'] > 0;
     }
 }
