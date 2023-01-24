@@ -4,7 +4,7 @@
             <script id="pattern" type="text/template">
                 <div data-book-id="{book_id}" class="book_item col-xs-6 col-sm-3 col-md-2 col-lg-2">
                     <div class="book">
-                        <a href="/book/<?=$content['id'] ?>"><img src="/static/books-img/<?=$content['imgName'] ?>" alt="{title}">
+                        <a href="/book/<?=$content['id'] ?>"><img src="../<?=IMG_PATH?><?=$content['imgName'] ?>" alt="{title}">
                             <div data-title="{title}" class="blockI">
                                 <div data-book-title="{title}" class="title size_text"><?=$content['title'] ?></div>
                                 <div data-book-author="{author}" class="author"><?=$content['author'] ?></div>
@@ -19,7 +19,7 @@
             <div id="id" book-id="{book_id}">
                 <div id="bookImg" class="col-xs-12 col-sm-3 col-md-3 item" style="
     margin:;
-"><img src="/static/books-img/<?=$content['imgName'] ?>" alt="Responsive image" class="img-responsive">
+"><img src="../<?=IMG_PATH?><?=$content['imgName'] ?>" alt="Responsive image" class="img-responsive">
                     <hr>
                 </div>
                 <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9 info">

@@ -34,7 +34,12 @@
                                     $("#search").bind("keypress", function (e) {
                                         if (e.keyCode == 13) {
                                             e.preventDefault();
-                                            window.location.replace("http://library.local/?search="+$(this).val());
+                                            if($("#search").val() != '') {
+                                                window.location.replace("http://library.local/?search=" + $(this).val());
+                                            }
+                                            else {
+                                                $("#search").blur();
+                                            }
                                         }
                                     })
                                 </script>

@@ -5,7 +5,7 @@
             <div data-book-id="<?=$book['id']?>" class="book_item col-xs-6 col-sm-3 col-md-2 col-lg-2">
                 <div class="book">
                     <a href="http://library.local/books/<?php echo $book['id']?>">
-                        <img src="/static/books-img/<?=$book['imgName']?>" alt="<?=$book['title']?>">
+                        <img src="<?=IMG_PATH?><?=$book['imgName']?>" alt="<?=$book['title']?>">
                         <div data-title="<?=$book['title']?>" class="blockI" style="height: 46px;">
                             <div data-book-title="<?=$book['title']?>" class="title size_text"><?=$book['title']?></div>
                             <div data-book-author="<?=$book['author']?>" class="author"><?=$book['author']?></div>
