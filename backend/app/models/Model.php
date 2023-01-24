@@ -25,10 +25,10 @@ abstract class Model extends \vendor\core\Model
         return $this->executeDB('SELECT ' . implode(',', $columns) . ' FROM books WHERE id=? AND delete_date IS NULL ;', 'i', [$id])[0];
     }
 
-    public function getBooks($fields, $pageNum, $booksPerPage, $orderBy, $order) : array {
+    public function getBooks(array $fields, int $pageNum, int $booksPerPage, string $orderBy, string $order) : array {
         $fields = implode(', ', $fields);
         $books = $this->executeDB("SELECT $fields FROM books WHERE delete_date IS NULL ORDER BY $orderBy $order LIMIT ?, ?",
-            'ii', [($pageNum-1)*$booksPerPage, $booksPerPage]);
+            'ii', [max(($pageNum-1)*$booksPerPage, 0), $booksPerPage]);
         $this->totalBooks = $this->getTotalBooks();
         return $books;
     }

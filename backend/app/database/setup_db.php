@@ -1,22 +1,63 @@
 <?php
 
+const USER = 'root';
+const PASSWORD = '';
+const DB_HOST = 'localhost';
+const DB_NAME = 'librarySecond';
+
 setup();
 
 function setup() : void
 {
-    $mysql = new mysqli('localhost', 'root', '');
+    $mysql = new mysqli(DB_HOST, USER, PASSWORD);
 
     //creating database
-    $mysql->query('CREATE DATABASE library');
+    echo "Database '" . DB_NAME . "':\t";
+    $databases = $mysql->query("SHOW DATABASES LIKE '". DB_NAME ."';");
 
+    if($databases->num_rows == 0) {
+        echo $mysql->query(file_get_contents('createDB.sql')) ? 'created' : 'creation failed';
+    }
+    else {
+        echo 'exists';
+    }
 
-    $mysql = new mysqli('localhost', 'root', '', 'library');
-    //creating tables
-    $mysql->query('CREATE TABLE books (id INT AUTO_INCREMENT KEY, title VARCHAR(100), description VARCHAR(400),
- pages INT, year INT, views INT DEFAULT 0, clicks INT DEFAULT 0)');
-    $mysql->query('CREATE TABLE authors (id INT AUTO_INCREMENT KEY, name VARCHAR(50) UNIQUE)');
-    $mysql->query('CREATE TABLE books_authors (book_id INT, author_id INT,
- FOREIGN KEY (author_id) REFERENCES authors (id) ON DELETE CASCADE,
- FOREIGN KEY (book_id) REFERENCES books (id) ON DELETE CASCADE)');
-    $mysql->query('CREATE TABLE admins (login VARCHAR(30) KEY, password VARCHAR(30))');
+    $mysql->select_db(DB_NAME);
+    //CREATING TABLES
+    //books table
+    echo "\nTable 'books':\t\t";
+    $tables = $mysql->query("SHOW TABLES LIKE 'books'");
+    if($tables->num_rows == 0) {
+        echo $mysql->query(file_get_contents('createTableBooks.sql')) ? 'created' : 'creation failed';
+    } else {
+        echo 'exists';
+    }
+    //authors table
+    echo "\nTable 'authors':\t";
+    $tables = $mysql->query("SHOW TABLES LIKE 'authors'");
+    if($tables->num_rows == 0) {
+        echo $mysql->query(file_get_contents('createTableAuthors.sql')) ? 'created' : 'creation failed';
+    } else {
+        echo 'exists';
+    }
+    //books authors table
+    echo "\nTable 'books_authors':\t";
+    $tables = $mysql->query("SHOW TABLES LIKE 'books_authors'");
+    if($tables->num_rows == 0) {
+        echo $mysql->query(file_get_contents('createTableBooksAuthors.sql')) ? 'created' : 'creation failed';
+    } else {
+        echo 'exists';
+    }
+    //admins table
+    echo "\nTable 'admins':\t\t";
+    $tables = $mysql->query("SHOW TABLES LIKE 'admins'");
+    if($tables->num_rows == 0) {
+        echo $mysql->query(file_get_contents('createTableAdmins.sql')) ? 'created' : 'creation failed';
+    } else {
+        echo 'exists';
+    }
+
+    //migration
+    $mysql->query(file_get_contents('migration_addColumnDelete.sql'));
+    echo "\n";
 }
