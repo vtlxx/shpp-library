@@ -22,7 +22,7 @@ abstract class Model extends \vendor\core\Model
     }
 
     public function getBookInfo(int $id, array $columns) : array|bool {
-        return $this->executeDB('SELECT ' . implode(',', $columns) . ' FROM books WHERE id=? AND delete_date IS NULL ;', 'i', [$id])[0];
+        return $this->executeDB('SELECT ' . implode(',', $columns) . ' FROM books WHERE id=? AND delete_date IS NULL ;', 'i', [$id])[0] ?? false;
     }
 
     public function getBooks(array $fields, int $pageNum, int $booksPerPage, string $orderBy, string $order) : array {

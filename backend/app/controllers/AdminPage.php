@@ -54,6 +54,13 @@ class AdminPage extends Controller
 
     public function addAction() : void
     {
+        if(!(array_key_exists('title', $_POST) && array_key_exists('description', $_POST) &&
+            array_key_exists('authors', $_POST) && array_key_exists('pages', $_POST) &&
+            array_key_exists('year', $_POST) && array_key_exists('bookimage', $_FILES))) {
+            http_response_code(400);
+            echo json_encode(['error' => 'not all parameters passed']);
+            exit();
+        }
         $data = $_POST;
         //parsing authors string
         $data['authors'] = explode(';', $data['authors']);
@@ -84,19 +91,8 @@ class AdminPage extends Controller
     public function deleteAction(): void
     {
         $model = new \app\models\AdminPage();
-        if($model->deleteBook((int)$this->route['id']) !== false) {
-            //deleting image of the book
-            $imgName = self::getImgName($this->route['id']);
-            if($imgName !== DEFAULT_IMG) {
-                //unlink(IMG_PATH . $imgName);
-            }
-            echo json_encode(['ok' => true]);
-        }
-        else {
-            http_response_code(404);
-            echo json_encode(['error' => 'delete went wrong!']);
-        }
-
+        $model->deleteBook((int)$this->route['id']);
+        echo json_encode(['ok' => true]);
     }
 
     private function isCorrectAdmin(string $login, string $pass) : bool

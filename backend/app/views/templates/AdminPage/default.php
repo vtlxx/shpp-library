@@ -135,7 +135,7 @@
         fetch('http://library.local/admin/api/v2/logout', {
             credentials: 'include',
             headers: {
-                'Authorization': 'Basic ' + btoa('none:none'),
+                'Authorization': 'Basic ' + btoa('logout:logout'),
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(() => {

@@ -63,7 +63,9 @@ class Router
             }
         } else {
             http_response_code(404);
-            require 'backend/app/errors/404.html';
+            $view = new \app\views\ErrorPage\View;
+            $view->display('404');
+            exit();
         }
     }
 

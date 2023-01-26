@@ -6,7 +6,8 @@ class AdminPage extends Model{
     /**
      * This method adds book to database
      *
-     * @param $data array info about book [title, year, pages, img, authors, description]
+     * @param $data array info about book [title, year, pages, authors, description]
+     * @param $files array _FILES array that contains book image ['bookimage']
      * @return void
      */
     public function addBook(array $data, $files) : void
@@ -49,7 +50,7 @@ class AdminPage extends Model{
         move_uploaded_file($files['bookimage']['tmp_name'], IMG_PATH.$name);
     }
 
-    public function deleteBook(int $id) : bool
+    public function deleteBook(int $id) : void
     {
         //finding authors, that linked with this book
         $this->executeDB('UPDATE books SET delete_date=DATE_ADD(now(), INTERVAL 1 MINUTE) WHERE id=?;',

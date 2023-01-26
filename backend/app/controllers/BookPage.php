@@ -10,6 +10,11 @@ class BookPage extends Controller
         //GETTING CONTENT FROM MODEL
         $model = new \app\models\BookPage();
         $content = $model->getBookInfo($this->route['id'], ['id', 'title', 'description', 'pages', 'year']);
+        if(!$content) {
+            $view = new \app\views\ErrorPage\View;
+            $view->display('404');
+            exit();
+        }
         //setting authors string (by converting an array to string)
         $content['author'] = implode(', ', array_column($model->getBookAuthors($this->route['id']), 'name'));
         //setting image name by book id (trying different extensions)
